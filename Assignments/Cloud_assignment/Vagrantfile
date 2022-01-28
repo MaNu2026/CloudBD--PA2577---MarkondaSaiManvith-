@@ -73,6 +73,7 @@ Vagrant.configure("2") do |config|
   #SHELL
 
   # Provisioing for puppet
+	# This list of commands installs latest puppet version using shell scripting
   config.vm.provision "shell", inline: <<-SHELL
   wget https://apt.puppetlabs.com/puppet5-release-$(lsb_release -cs).deb
   dpkg -i puppet5-release-$(lsb_release -cs).deb
@@ -80,6 +81,7 @@ Vagrant.configure("2") do |config|
   apt-get install -y puppet-agent
   SHELL
   
+	# Each node represents a box. 
   nodes = [
 	{:hostname => "web", :box => "bento/ubuntu-18.04",:ssh_port => "8080",
       :forwarded_port_guest => "22"},
@@ -95,6 +97,7 @@ Vagrant.configure("2") do |config|
       :forwarded_port_guest => "22"},
   ]
 
+	# The list commands functions as a for loop data structure. It configures each box which are present above in the node. Using shell scripting puppet is installed in each box. 
   nodes.each do |node|
 	config.vm.define node[:hostname] do |nodeconfig|
 		nodeconfig.vm.provision "shell", inline: <<-SHELL
@@ -104,6 +107,7 @@ Vagrant.configure("2") do |config|
   		apt-get install -y puppet-agent
  		SHELL
 
+	
 		nodeconfig.vm.box = "bento/ubuntu-18.04"
 		nodeconfig.vm.hostname = node[:hostname]
 		nodeconfig.vm.network :private_network, type: "dhcp" #ip: node[:ip]
@@ -121,6 +125,7 @@ Vagrant.configure("2") do |config|
   #apt-get install -y puppet-agent
   #SHELL
 
+	# Manifests_path describes location of puppet file, manifests_file decribes the name of the puppet file, module_path describes the list of directories where puppet identifies the modules.
   config.vm.provision :puppet do |puppet|
 	puppet.manifests_path = "puppet/manifests"
 	puppet.manifest_file = "site.pp"
