@@ -68,16 +68,17 @@ Vagrant.configure("2") do |config|
   #   apt-get install -y apache2
   # SHELL
   
+	# Each node represents a box, specifying its hostnames, servers. 
   nodes = [
 	{:hostname => "dbserver", :box => "bento/ubuntu-18.04"},
  	{:hostname => "appserver", :box => "bento/ubuntu-18.04"},
   ]
-  
+	
+ # We configured to each hostname, and it updates usually by updating each node. We configured to vagrant to use puppet provisioning. 
+ # We configured the node to its new provider digital ocean and overriding its existing provider. We need to set environmental variable for authorisation; for set we provided SSH key and API token/personal access token for authorising into digital ocean. 	
  nodes.each do |node|
 	config.vm.define node[:hostname] do |nodeconfig|
-		
-		nodeconfig.vm.synced_folder ".", "/vagrant", type: "rsync"
-		
+		nodeconfig.vm.synced_folder ".", "/vagrant", type: "rsync"		
 		nodeconfig.vm.provider :digital_ocean do |provider, override|
 			override.ssh.private_key_path = 'C:/Tokens/sshkey/keyfile'
 			override.vm.box = 'digital_ocean'
@@ -94,11 +95,10 @@ Vagrant.configure("2") do |config|
 			provider.ipv6 = false
 			provider.monitoring = false
 		end
-		
+	# The following code configures each box which are present above in the node, which gets created locally in our virtual machine. Using shell scripting puppet is installed in each box.
 		nodeconfig.vm.provider :virtualbox do |v, override|
 			override.vm.box = 'bento/ubuntu-18.04'
 		end
-		
 		nodeconfig.vm.provision "shell", inline: <<-SHELL
   		wget https://apt.puppetlabs.com/puppet5-release-$(lsb_release -cs).deb
   		dpkg -i puppet5-release-$(lsb_release -cs).deb
@@ -112,8 +112,10 @@ Vagrant.configure("2") do |config|
 		#nodeconfig.vm.network :private_network, ip: node[:ip]	
 	end
   end
-  
+  # This command installs the latest version of puppet. 
   config.puppet_install.puppet_version = :latest 
+  
+  # Manifests_path describes location of puppet file, manifests_file decribes the name of the puppet file, module_path describes the list of directories where puppet identifies the modules.
   config.vm.provision :puppet do |puppet|
 	puppet.manifests_path = "puppet/manifests"
 	puppet.manifest_file = "site.pp"
