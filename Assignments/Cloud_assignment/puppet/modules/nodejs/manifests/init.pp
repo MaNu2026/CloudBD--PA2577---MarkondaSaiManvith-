@@ -1,4 +1,4 @@
-# The below installs nodejs and curl. 
+# The below code installs nodejs and curl. 
 class nodejs {
 	package{ 'nodejs':        
 			ensure => 'present',
