@@ -1,4 +1,4 @@
-# Stage ensures it execuates baseconfig before performing any other execuations. 
+# Stage ensures it execuates baseconfig before performing any other execuations(i.e. baseconfig is added to pre run stage, hence it is execuated initially). 
 stage { 'pre':
 	before => Stage['main']
 }
@@ -7,7 +7,7 @@ class { 'baseconfig':
 	stage => 'pre'
 }
 
-# include baseconfig explains importing a package. 
+# include baseconfig explains importing a package.  
 include baseconfig
 
 # This defines name of the box i.e "appserver" which runs in the local machine. include nodejs defines a package which contains instructions of provisioning appserver box.
