@@ -1,3 +1,4 @@
+# Stage ensures it execuates baseconfig before performing any other execuations(i.e. baseconfig is added to pre run stage, hence it is execuated initially).
 stage { 'pre':
 	before => Stage['main']
 }
