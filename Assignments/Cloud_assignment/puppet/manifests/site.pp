@@ -23,7 +23,7 @@ node 'web.local'{
 	include nginx
 }
 
-# This commands defines the test servers 0,1,2.
+# This commands defines the test servers 0,1,2. Which eventually requires to update because in the servers apt-get update command is written, by include baseconfig it updates.
 node /tst\d+.local$/{
 	include baseconfig
 }
