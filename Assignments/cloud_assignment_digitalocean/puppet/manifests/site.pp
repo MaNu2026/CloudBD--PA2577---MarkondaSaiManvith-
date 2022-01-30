@@ -3,6 +3,7 @@ stage { 'pre':
 	before => Stage['main']
 }
 
+# Class is a named entity/blocks.
 class { 'baseconfig':
 	stage => 'pre'
 }
