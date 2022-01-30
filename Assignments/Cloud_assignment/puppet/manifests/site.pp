@@ -7,7 +7,7 @@ class { 'baseconfig':
 	stage => 'pre'
 }
 
-# include baseconfig explains importing a package.  
+# include baseconfig explains importing a package that means all the nodes to include baseconfig package.  
 include baseconfig
 
 # This defines name of the box i.e "appserver" which runs in the local machine. include nodejs defines a package which contains instructions of provisioning appserver box.
